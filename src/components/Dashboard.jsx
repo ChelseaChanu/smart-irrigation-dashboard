@@ -86,11 +86,11 @@ export default function Dashboard() {
   };
     
   return (
-    <div className="w-full min-h-screen flex flex-col gap-[35px] bg-[#060C1A] text-white p-8">
+    <div className="w-full min-h-screen flex flex-col gap-[25px] bg-[#060C1A] text-white p-8">
       <div className="w-full flex flex-row justify-between">
         {/* Search Bar */}
         <div className="flex flex-row gap-5 justify-center bg-[#0E1421] w-[520px] rounded-[50px] px-[22px] py-[11px] ">
-          <img src="/assets/search-icon.png" alt="" className="w-[18px] h-[18px]" />
+          <img src="assets/search-icon.png" alt="" className="w-[18px] h-[18px]" />
           <input
             type="text"
             placeholder="Search Place...."
@@ -103,7 +103,7 @@ export default function Dashboard() {
 
         <div className="w-[322px] p-[8px] bg-[#0E1421] rounded-[50px] flex flex-row gap-[10px] items-center">
           <div className="w-[30px] p-[2px] bg-[#742BEC] rounded-[50px]">
-            <img src="/assets/user.png" alt="" className="w-full" />
+            <img src="assets/user.png" alt="" className="w-full" />
           </div>
           <p className="text-sm text-[#ffffff]">Username</p>
         </div>
@@ -114,7 +114,7 @@ export default function Dashboard() {
         <div className="w-[676px] h-[370px] bg-[#0E1421] rounded-[40px] p-6 flex flex-row justify-between items-center">
           <div className="flex flex-col gap-[34px]">
             <div className="bg-[#742BEC] w-[auto] h-[40px] rounded-[50px] px-[13px] py-[10px] flex flex-row gap-[5px] items-center">
-              <img src="/assets/location.png" alt="" />
+              <img src="assets/location.png" alt="" />
               <p className="w-full">{location}</p>
             </div>
 
@@ -133,7 +133,7 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="flex flex-col items-center">
-            <img src="/assets/Cloud.png" alt="" />
+            <img src="assets/Cloud.png" alt="" />
           </div>
         </div>
 
