@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import Sidebar from "./Sidebar";
 
 export default function Dashboard() {
   const [sensorData, setSensorData] = useState({
-    soilMoisture: 45, // dummy for now
+    soilMoisture: 45, 
     temperature: null,
     humidity: null,
     condition: "",
@@ -86,10 +87,10 @@ export default function Dashboard() {
   };
     
   return (
-    <div className="w-full min-h-screen flex flex-col gap-[25px] bg-[#060C1A] text-white p-8">
-      <div className="w-full flex flex-row justify-between">
+    <div className="min-h-screen flex flex-col gap-[25px] bg-[#060C1A] text-white p-8 overflow-x-hidden">
+      <div className="w-full flex flex-col gap-2.5 justify-between llg:flex-row">
         {/* Search Bar */}
-        <div className="flex flex-row gap-5 justify-center bg-[#0E1421] w-[520px] rounded-[50px] px-[22px] py-[11px] ">
+        <div className="w-full flex flex-row gap-5 justify-center bg-[#0E1421] llg:w-[520px] rounded-[50px] px-[22px] py-[11px]">
           <img src="assets/search-icon.png" alt="" className="w-[18px] h-[18px]" />
           <input
             type="text"
@@ -101,7 +102,7 @@ export default function Dashboard() {
           />
         </div>
 
-        <div className="w-[322px] p-[8px] bg-[#0E1421] rounded-[50px] flex flex-row gap-[10px] items-center">
+        <div className="w-full llg:w-[322px] p-[8px] bg-[#0E1421] rounded-[50px] flex flex-row gap-[10px] items-center">
           <div className="w-[30px] p-[2px] bg-[#742BEC] rounded-[50px]">
             <img src="assets/user.png" alt="" className="w-full" />
           </div>
@@ -109,9 +110,9 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-col gap-5 justify-between items-center llg:flex-row">
         {/* Left Card */}
-        <div className="w-[676px] h-[370px] bg-[#0E1421] rounded-[40px] p-6 flex flex-row justify-between items-center">
+        <div className="w-full llg:w-[500px] h-[370px] bg-[#0E1421] rounded-[40px] p-6 flex flex-row justify-between items-center">
           <div className="flex flex-col gap-[34px]">
             <div className="bg-[#742BEC] w-[auto] h-[40px] rounded-[50px] px-[13px] py-[10px] flex flex-row gap-[5px] items-center">
               <img src="assets/location.png" alt="" />
@@ -138,18 +139,12 @@ export default function Dashboard() {
         </div>
 
         {/* Right Card - Today Highlight */}
-        <div className="w-[530px] h-[439px] px-[18px] py-[16px] rounded-[30px] bg-[#121B2F]">
+        <div className="w-full llg:w-[450px] h-auto llg:h-[439px] px-[18px] py-[16px] rounded-[30px] bg-[#121B2F]">
           <h2 className="text-[20px] mb-4">Today Highlight</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-[#0E1421] h-[170px] rounded-[22px] p-2 flex flex-col gap-[30px]">
-              <h3 className="font-semibold">Soil Moisture</h3>
-              <p className="w-full text-center text-6xl">
-                {sensorData.soilMoisture}%
-              </p>
-            </div>
+          <div className="grid grid-cols-1 llg:grid-cols-2 gap-4">
             <div className="bg-[#0E1421] h-[170px] rounded-[22px] p-2 flex flex-col gap-[30px]">
               <h3 className="font-semibold">Temperature</h3>
-              <p className="w-full text-center text-6xl">
+              <p className="w-full text-center text-6xl llg:text-[46px] lg:text-6xl">
                 {sensorData.temperature !== null
                   ? `${sensorData.temperature}°C`
                   : "--"}
@@ -157,22 +152,28 @@ export default function Dashboard() {
             </div>
             <div className="bg-[#0E1421] h-[170px] rounded-[22px] p-2 flex flex-col gap-[30px]">
               <h3 className="font-semibold">Humidity</h3>
-              <p className="w-full text-center text-6xl">
+              <p className="w-full text-center text-6xl llg:text-[46px] lg:text-6xl">
                 {sensorData.humidity !== null
                   ? `${sensorData.humidity}%`
                   : "--"}
               </p>
             </div>
             <div className="bg-[#0E1421] h-[170px] rounded-[22px] p-2 flex flex-col gap-[30px]">
-              <h3 className="font-semibold">AI Recommendation</h3>
+              <h3 className="font-semibold break-words">AI Recommendation</h3>
               <p
-                className={`w-full text-center text-3xl ${
+                className={`w-full text-center text-3xl llg:text-2xl lg:text-3xl ${
                   sensorData.recommendation === "Irrigate"
                     ? "text-red-400"
                     : "text-green-400"
                 }`}
               >
                 {sensorData.recommendation}
+              </p>
+            </div>
+            <div className="bg-[#0E1421] h-[170px] rounded-[22px] p-2 flex flex-col gap-[30px]">
+              <h3 className="font-semibold">Soil Moisture</h3>
+              <p className="w-full text-center text-6xl llg:text-[46px] lg:text-6xl">
+                {sensorData.soilMoisture}%
               </p>
             </div>
           </div>
