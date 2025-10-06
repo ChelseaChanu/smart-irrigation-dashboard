@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-function Sidebar() {
+function Sidebar({ onLogout }) {  // receive logout function as prop
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -29,15 +29,20 @@ function Sidebar() {
           >
             Control Pump
           </button>
+
+          {/* Logout Button */}
+          <button
+            onClick={onLogout}
+            className="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-center"
+          >
+            Logout
+          </button>
         </nav>
       </div>
 
       {/* Mobile Top Bar */}
       <div className="w-full lg:hidden flex items-center justify-between p-2.5 bg-[#0e1421] text-white">
-        <div
-          onClick={() => setMobileMenuOpen(true)}
-          className="focus:outline-none"
-        >
+        <div onClick={() => setMobileMenuOpen(true)} className="focus:outline-none">
           <img src="assets/menu.png" alt="Menu" className="scale-x-[-1]" />
         </div>
         <h1 className="text-[2rem]! md:text-lg font-bold">Dashboard</h1>
@@ -74,6 +79,14 @@ function Sidebar() {
               onClick={() => alert("Pump Control Clicked!")}
             >
               Control Pump
+            </button>
+
+            {/* Logout Button */}
+            <button
+              onClick={onLogout}
+              className="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-center"
+            >
+              Logout
             </button>
           </nav>
         </div>
