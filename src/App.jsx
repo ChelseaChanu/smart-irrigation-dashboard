@@ -3,6 +3,7 @@ import AuthPage from "./components/AuthPage.jsx";
 import Layout from "./components/Layout.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import SoilRecommendation from "./components/SoilRecommendation.jsx";
+import IrrigationForecast from "./components/IrrigationForecast.jsx";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/soil" element={<SoilRecommendation />} />
+            <Route path="/irrigation-forecast" element={<IrrigationForecast />} />
           </Route>
         </Routes>
       </Router>

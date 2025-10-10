@@ -23,6 +23,14 @@ function Sidebar({ onLogout }) {  // receive logout function as prop
             <img src="assets/Soy Bean.png" alt="Crop Recommendation" className="w-6 h-6 max-w-full" />
             <span>Crop Recommendation</span>
           </Link>
+          <Link
+              to="/irrigation-forecast"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/10"
+            >
+              <img src="assets/Soy Bean.png" alt="Crop Recommendation" className="w-6 h-6 max-w-full" />
+              <span>AI Irrigation Forecast</span>
+            </Link>
           <button
             className="px-4 py-2 rounded bg-[#FF6B6B] hover:bg-[#E55A5A] text-center"
             onClick={() => alert("Pump Control Clicked!")}
@@ -73,6 +81,14 @@ function Sidebar({ onLogout }) {  // receive logout function as prop
             >
               <img src="assets/Soy Bean.png" alt="Crop Recommendation" className="w-6 h-6 max-w-full" />
               <span>Crop Recommendation</span>
+            </Link>
+            <Link
+              to="/irrigation-forecast"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/10"
+            >
+              <img src="assets/Soy Bean.png" alt="Crop Recommendation" className="w-6 h-6 max-w-full" />
+              <span>AI Irrigation Forecast</span>
             </Link>
             <button
               className="px-4 py-2 rounded bg-[#FF6B6B] hover:bg-[#E55A5A] text-center"

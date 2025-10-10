@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import cropDatabase from "../cropDatabase.json";
-import Sidebar from './Sidebar'
 
 export default function SoilRecommendation() {
   const [mode, setMode] = useState("general");

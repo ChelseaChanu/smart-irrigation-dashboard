@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 
 export default function Dashboard() {
   const [sensorData, setSensorData] = useState({
-    soilMoisture: 45, 
+    soilMoisture: 45,
     temperature: null,
     humidity: null,
     condition: "",
@@ -12,15 +12,24 @@ export default function Dashboard() {
 
   const [search, setSearch] = useState("");
   const [location, setLocation] = useState("India");
+  const [username, setUsername] = useState("");
 
-  const API_KEY = "ddce2934c4f79c76915207c99d113f30"; 
+  const API_KEY = "ddce2934c4f79c76915207c99d113f30";
+
+  // Fetch username from localStorage on mount
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username") || "User";
+    setUsername(storedUsername);
+  }, []);
 
   // Function to fetch weather data
   const fetchWeather = async (city) => {
     if (!city) return;
     try {
       const res = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city.trim())}&units=metric&appid=${API_KEY}`
+        `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
+          city.trim()
+        )}&units=metric&appid=${API_KEY}`
       );
       const data = await res.json();
       if (data.cod === 200) {
@@ -45,7 +54,6 @@ export default function Dashboard() {
     }
   };
 
-
   // Handle Enter key in search bar
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && search.trim() !== "") {
@@ -69,9 +77,34 @@ export default function Dashboard() {
 
   const { day, date } = formatDate();
 
-  // Fetch default weather once (India) on page load
+  // Fetch initial weather data
   useEffect(() => {
-    fetchWeather("India");
+    fetchWeather("Delhi");
+  }, []);
+
+  // Update soil moisture every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSensorData((prev) => {
+        const soilFluctuation = Math.floor(Math.random() * 5) - 2; // -2 to +2
+        const tempFluctuation = Math.floor(Math.random() * 3) - 1; // -1 to +1
+        const humFluctuation = Math.floor(Math.random() * 4) - 2; // -2 to +1
+
+        let newSoil = Math.max(0, Math.min(100, prev.soilMoisture + soilFluctuation));
+        let newTemp = Math.max(-10, Math.min(50, prev.temperature + tempFluctuation));
+        let newHum = Math.max(0, Math.min(100, prev.humidity + humFluctuation));
+
+        return {
+          ...prev,
+          soilMoisture: newSoil,
+          temperature: newTemp,
+          humidity: newHum,
+          recommendation: newSoil < 40 ? "Irrigate" : "No Irrigation",
+        };
+      });
+    }, 4000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const getIrrigationTip = () => {
@@ -85,10 +118,12 @@ export default function Dashboard() {
       return "";
     }
   };
-    
+
   return (
     <div className="min-h-screen flex flex-col gap-[25px] bg-[#060C1A] text-white p-8 overflow-x-hidden">
-      <div className="w-full flex flex-col gap-2.5 justify-between llg:flex-row">
+      
+      {/* Greeting + Search Bar */}
+      <div className="w-full flex flex-col gap-2.5 justify-between llg:flex-row items-center">
         {/* Search Bar */}
         <div className="w-full flex flex-row gap-5 justify-center bg-[#0E1421] llg:w-[520px] rounded-[50px] px-[22px] py-[11px]">
           <img src="assets/search-icon.png" alt="" className="w-[18px] h-[18px]" />
@@ -102,11 +137,12 @@ export default function Dashboard() {
           />
         </div>
 
+        {/* Username display */}
         <div className="w-full llg:w-[322px] p-[8px] bg-[#0E1421] rounded-[50px] flex flex-row gap-[10px] items-center">
           <div className="w-[30px] p-[2px] bg-[#742BEC] rounded-[50px]">
             <img src="assets/user.png" alt="" className="w-full" />
           </div>
-          <p className="text-sm text-[#ffffff]">Username</p>
+          <p className="text-sm text-[#ffffff]">{username}</p>
         </div>
       </div>
 
@@ -159,17 +195,17 @@ export default function Dashboard() {
               </p>
             </div>
             <div className="bg-[#0E1421] h-[170px] rounded-[22px] p-2 flex flex-col gap-[30px]">
-              <h3 className="font-semibold break-words">AI Recommendation</h3>
-              <p
-                className={`w-full text-center text-3xl llg:text-2xl lg:text-3xl ${
-                  sensorData.recommendation === "Irrigate"
-                    ? "text-red-400"
-                    : "text-green-400"
-                }`}
-              >
-                {sensorData.recommendation}
-              </p>
-            </div>
+  <h3 className="font-semibold break-words">AI Recommendation</h3>
+  <p
+    className={`w-full text-center text-2xl ${
+      (localStorage.getItem("aiForecastTip") || "No Forecast Yet") === "Irrigation Recommended"
+        ? "text-red-400"
+        : "text-green-400"
+    }`}
+  >
+    {localStorage.getItem("aiForecastTip") || "No Forecast Yet"}
+  </p>
+</div>
             <div className="bg-[#0E1421] h-[170px] rounded-[22px] p-2 flex flex-col gap-[30px]">
               <h3 className="font-semibold">Soil Moisture</h3>
               <p className="w-full text-center text-6xl llg:text-[46px] lg:text-6xl">
