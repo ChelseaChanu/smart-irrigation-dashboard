@@ -210,6 +210,7 @@ Do not include any extra text or explanations. Only return the JSON array.`;
             Enter soil lab data below. These values should come from soil tests you have conducted. 
             The AI will suggest crops best suited for these nutrient levels.
           </p>
+          <p className="text-gray-300">Typical ranges for most crops: N: 40-60, P: 20-40, K: 30-50, pH: 5.5-7.5</p>
           <div className="w-full grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6 justify-between">
             <input
               type="number"
