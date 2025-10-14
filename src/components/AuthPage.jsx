@@ -1,52 +1,56 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile, 
+} from "firebase/auth";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   // Redirect if already logged in
   useEffect(() => {
-    if (localStorage.getItem("authToken")) {
-      navigate("/dashboard");
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/dashboard");
+      }
+    });
+    return () => unsubscribe();
   }, [navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     if (!email || !password || (!isLogin && !username)) {
       alert("Please fill all required fields");
       return;
     }
 
-    const savedUsers = JSON.parse(localStorage.getItem("users") || "{}");
+    try {
+      if (isLogin) {
+        await signInWithEmailAndPassword(auth, email.trim(), password);
+      } else {
+        const userCredential = await createUserWithEmailAndPassword(auth, email.trim(), password);
+        await updateProfile(userCredential.user, { displayName: username });
+      }
 
-    if (isLogin) {
-      if (!savedUsers[email] || savedUsers[email].password !== password) {
-        alert("Invalid email or password");
-        return;
-      }
-      localStorage.setItem("authToken", "user_logged_in");
-      localStorage.setItem("userEmail", email);
-      localStorage.setItem("username", savedUsers[email].username);
-    } else {
-      if (savedUsers[email]) {
-        alert("User already exists with this email");
-        return;
-      }
-      savedUsers[email] = { password, username };
-      localStorage.setItem("users", JSON.stringify(savedUsers));
-      localStorage.setItem("authToken", "user_logged_in");
-      localStorage.setItem("userEmail", email);
-      localStorage.setItem("username", username);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error(err);
+      if (err.code === "auth/invalid-credential") setError("Something went wrong! Please check your credentials. If new user, please sign up first.");
+      else if (err.code === "auth/email-already-in-use") setError("Email already registered");
+      else setError(err.message);
     }
-
-    navigate("/dashboard");
   };
 
   return (
@@ -66,7 +70,6 @@ export default function AuthPage() {
               className="w-full px-4 py-2 rounded-xl bg-[#121B2F] text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#742BEC]"
             />
           )}
-
           <input
             type="email"
             placeholder="Email"
@@ -74,22 +77,23 @@ export default function AuthPage() {
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-2 rounded-xl bg-[#121B2F] text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#742BEC]"
           />
-
-          <div className="relative w-full">
+          <div className="relative">
             <input
-              type={showPassword ? "text" : "password"} 
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 rounded-xl bg-[#121B2F] text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#742BEC]"
             />
             <img
-              src={showPassword ? "assets/password-open.png" : "assets/password-open.png"}
-              alt="toggle password"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 cursor-pointer"
+              src={showPassword ? "assets/password-close.png" : "assets/password-open.png"}
+              alt="toggle"
+              className="absolute right-3 top-2.5 w-6 h-6 cursor-pointer"
               onClick={() => setShowPassword(!showPassword)}
             />
           </div>
+
+          {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
           <button
             type="submit"

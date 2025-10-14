@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import Sidebar from "./Sidebar";
+import { onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase"; 
 
 export default function Dashboard() {
   const [sensorData, setSensorData] = useState({
@@ -14,13 +16,21 @@ export default function Dashboard() {
   const [location, setLocation] = useState("India");
   const [username, setUsername] = useState("");
 
-  const API_KEY = "ddce2934c4f79c76915207c99d113f30";
+  const WEATHER_API_KEY = "ddce2934c4f79c76915207c99d113f30";
 
-  // Fetch username from localStorage on mount
+  const navigate = useNavigate();
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username") || "User";
-    setUsername(storedUsername);
-  }, []);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUsername(user.displayName || "User"); 
+      } else {
+        navigate("/"); 
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+
 
   // Function to fetch weather data
   const fetchWeather = async (city) => {
@@ -29,7 +39,7 @@ export default function Dashboard() {
       const res = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
           city.trim()
-        )}&units=metric&appid=${API_KEY}`
+        )}&units=metric&appid=${WEATHER_API_KEY}`
       );
       const data = await res.json();
       if (data.cod === 200) {
@@ -125,7 +135,7 @@ export default function Dashboard() {
       {/* Greeting + Search Bar */}
       <div className="w-full flex flex-col gap-2.5 justify-between llg:flex-row items-center">
         {/* Search Bar */}
-        <div className="w-full flex flex-row gap-5 justify-center bg-[#0E1421] llg:w-[520px] rounded-[50px] px-[22px] py-[11px]">
+        <div className="w-full flex flex-row gap-5 justify-center bg-[#0E1421] llg:w-[520px] rounded-[50px] px-[22px] py-[11px] shadow-[0_0_6px_rgba(255,255,255,0.4)]">
           <img src="assets/search-icon.png" alt="" className="w-[18px] h-[18px]" />
           <input
             type="text"
@@ -133,7 +143,7 @@ export default function Dashboard() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full text-[#676B73] text-sm focus:outline-none bg-transparent"
+            className="w-full text-[#f7f8f9] text-sm focus:outline-none bg-transparent"
           />
         </div>
 
@@ -194,18 +204,6 @@ export default function Dashboard() {
                   : "--"}
               </p>
             </div>
-            <div className="bg-[#0E1421] h-[170px] rounded-[22px] p-2 flex flex-col gap-[30px]">
-  <h3 className="font-semibold break-words">AI Recommendation</h3>
-  <p
-    className={`w-full text-center text-2xl ${
-      (localStorage.getItem("aiForecastTip") || "No Forecast Yet") === "Irrigation Recommended"
-        ? "text-red-400"
-        : "text-green-400"
-    }`}
-  >
-    {localStorage.getItem("aiForecastTip") || "No Forecast Yet"}
-  </p>
-</div>
             <div className="bg-[#0E1421] h-[170px] rounded-[22px] p-2 flex flex-col gap-[30px]">
               <h3 className="font-semibold">Soil Moisture</h3>
               <p className="w-full text-center text-6xl llg:text-[46px] lg:text-6xl">

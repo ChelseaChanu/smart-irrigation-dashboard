@@ -1,8 +1,20 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
-function Sidebar({ onLogout }) {  // receive logout function as prop
+function Sidebar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
 
   return (
     <>
@@ -20,17 +32,17 @@ function Sidebar({ onLogout }) {  // receive logout function as prop
             to="/soil"
             className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/10 w-full"
           >
-            <img src="assets/Soy Bean.png" alt="Crop Recommendation" className="w-6 h-6 max-w-full" />
-            <span>Crop Recommendation</span>
+            <img src="assets/Soy Bean.png" alt="AI Crop Recommendation" className="w-6 h-6 max-w-full" />
+            <span>AI Crop Recommendation</span>
           </Link>
           <Link
-              to="/irrigation-forecast"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/10"
-            >
-              <img src="assets/Soy Bean.png" alt="Crop Recommendation" className="w-6 h-6 max-w-full" />
-              <span>AI Irrigation Forecast</span>
-            </Link>
+            to="/irrigation-forecast"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/10"
+          >
+            <img src="assets/Soy Bean.png" alt="AI Irrigation Forecast" className="w-6 h-6 max-w-full" />
+            <span>AI Irrigation Forecast</span>
+          </Link>
           <button
             className="px-4 py-2 rounded bg-[#FF6B6B] hover:bg-[#E55A5A] text-center"
             onClick={() => alert("Pump Control Clicked!")}
@@ -38,9 +50,9 @@ function Sidebar({ onLogout }) {  // receive logout function as prop
             Control Pump
           </button>
 
-          {/* Logout Button */}
+          {/*Logout Button */}
           <button
-            onClick={onLogout}
+            onClick={handleLogout}
             className="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-center"
           >
             Logout
@@ -79,15 +91,15 @@ function Sidebar({ onLogout }) {  // receive logout function as prop
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/10"
             >
-              <img src="assets/Soy Bean.png" alt="Crop Recommendation" className="w-6 h-6 max-w-full" />
-              <span>Crop Recommendation</span>
+              <img src="assets/Soy Bean.png" alt="AI Crop Recommendation" className="w-6 h-6 max-w-full" />
+              <span>AI Crop Recommendation</span>
             </Link>
             <Link
               to="/irrigation-forecast"
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/10"
             >
-              <img src="assets/Soy Bean.png" alt="Crop Recommendation" className="w-6 h-6 max-w-full" />
+              <img src="assets/Soy Bean.png" alt="AI Irrigation Forecast" className="w-6 h-6 max-w-full" />
               <span>AI Irrigation Forecast</span>
             </Link>
             <button
@@ -97,9 +109,9 @@ function Sidebar({ onLogout }) {  // receive logout function as prop
               Control Pump
             </button>
 
-            {/* Logout Button */}
+            {/*Logout Button (Mobile) */}
             <button
-              onClick={onLogout}
+              onClick={handleLogout}
               className="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-center"
             >
               Logout

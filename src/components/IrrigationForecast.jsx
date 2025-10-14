@@ -62,9 +62,9 @@ function IrrigationForecast() {
 
   return (
     <div className="min-h-screen bg-[#060C1A] text-white p-4 flex flex-col gap-6">
-      <div className="flex justify-between items-center">
+      <div className="w-full flex flex-col sm:flex-row gap-4 sm:justify-between items-center">
         <h1 className="text-3xl font-bold">Irrigation Forecast</h1>
-        <div className="flex gap-2">
+        <div className="flex w-full gap-2 sm:w-auto">
           <input
             type="text"
             placeholder="Enter city"
@@ -81,8 +81,8 @@ function IrrigationForecast() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between mb-6 items-start">
-        <div className="w-3/5 rounded">
+      <div className="flex flex-col gap-2 md:flex-row justify-between mb-6 items-start">
+        <div className="w-full rounded">
           <img
             src="assets/Forecast-Img.png"
             alt="Irrigation"
@@ -106,7 +106,7 @@ function IrrigationForecast() {
           <h2 className="text-2xl mb-4">
             Forecast for {capitalize(city)} ({forecastData.date})
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-gray-800 p-3 rounded text-center">
               <p className="font-bold">Avg Temp</p>
               <p>{forecastData.tempAvg}</p>
