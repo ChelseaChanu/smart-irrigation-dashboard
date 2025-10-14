@@ -131,8 +131,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen flex flex-col gap-[25px] bg-[#060C1A] text-white p-8 overflow-x-hidden">
-      
-      {/* Greeting + Search Bar */}
       <div className="w-full flex flex-col gap-2.5 justify-between llg:flex-row items-center">
         {/* Search Bar */}
         <div className="w-full flex flex-row gap-5 justify-center bg-[#0E1421] llg:w-[520px] rounded-[50px] px-[22px] py-[11px] shadow-[0_0_6px_rgba(255,255,255,0.4)]">
@@ -146,6 +144,18 @@ export default function Dashboard() {
             className="w-full text-[#f7f8f9] text-sm focus:outline-none bg-transparent"
           />
         </div>
+
+        <button
+          onClick={() => {
+            if (search.trim() !== "") {
+              fetchWeather(search);
+              setSearch("");
+            }
+          }}
+          className="ml-2 px-3 py-1 bg-[#742BEC] rounded text-white text-sm"
+        >
+          Search
+        </button>
 
         {/* Username display */}
         <div className="w-full llg:w-[322px] p-[8px] bg-[#0E1421] rounded-[50px] flex flex-row gap-[10px] items-center">
